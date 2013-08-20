@@ -1,7 +1,7 @@
 {
   "name": "back",
   "description": "Simple exponential backoff pulled out of Primus by @3rd-Eden",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "author": "Jarrett Cruger <jcrugzz@gmail.com>",
   "repository": {
     "url": "git://github.com/jcrugzz/back.git"
@@ -11,7 +11,7 @@
     "test": "tape test/*.js"
   },
   "engines": {
-    "node": "0.10.x"
+    "node": "0.10.x || 0.8.x"
   },
   "dependencies": {},
   "devDependencies": {
