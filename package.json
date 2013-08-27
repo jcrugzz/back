@@ -1,7 +1,7 @@
 {
   "name": "back",
   "description": "Simple exponential backoff pulled out of Primus by @3rd-Eden",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "keywords": [
     "random",
     "exponential",
