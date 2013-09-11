@@ -9,6 +9,11 @@ var Back = module.exports = function reconnect(callback, opts) {
   this.attempt = (+opts.attempt || 0) + 1;    // Current attempt.
   this.factor = opts.factor || 2;             // Back off factor.
 
+  //
+  // Bailout when we already have a backoff process running.
+  //
+  if (opts.backoff) return;
+
   // Bailout if we are about to make to much attempts. Please note that we use ...
   if (opts.attempt > opts.retries || opts.backoff) {
     return callback(new Error('Unable to retry'), opts);
