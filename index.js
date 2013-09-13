@@ -3,14 +3,16 @@ var Back = module.exports = function reconnect(callback, opts) {
 
   opts = opts || {};
 
-  this.maxDelay = opts.maxDelay || Infinity;  // Maximum delay.
-  this.minDelay = opts.minDelay || 500;       // Minimum delay.
-  this.retries = opts.retries || 10;          // Amount of allowed retries.
-  this.attempt = (+opts.attempt || 0) + 1;    // Current attempt.
-  this.factor = opts.factor || 2;             // Back off factor.
+  if (opts.backoff) return;
+
+  opts.maxDelay = opts.maxDelay || Infinity;  // Maximum delay.
+  opts.minDelay = opts.minDelay || 500;       // Minimum delay.
+  opts.retries = opts.retries || 10;          // Amount of allowed retries.
+  opts.attempt = (+opts.attempt || 0) + 1;    // Current attempt.
+  opts.factor = opts.factor || 2;             // Back off factor.
 
   // Bailout if we are about to make to much attempts. Please note that we use ...
-  if (opts.attempt > opts.retries || opts.backoff) {
+  if (opts.attempt > opts.retries) {
     return callback(new Error('Unable to retry'), opts);
   }
 
