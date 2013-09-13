@@ -32,9 +32,11 @@ var Back = module.exports = function reconnect(callback, opts) {
       ), opts.maxDelay)
     : opts.minDelay;
 
-  setTimeout(function delay() {
+  this.timer = setTimeout(function delay() {
     opts.backoff = false;
+    clearTimeout(this.timer);
+
     callback(undefined, opts);
-  }, opts.timeout);
+  }.bind(this), opts.timeout);
 
 };
