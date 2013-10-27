@@ -20,7 +20,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "tape": "~1.0.2"
+    "tape": "2.1.x"
   },
   "license": "MIT"
 }
