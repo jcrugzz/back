@@ -6,7 +6,7 @@ var back = require('../');
 test('wooo does exponential backoff work as expected?', function (t) {
   t.plan(3);
   var count = 0,
-      timeouts = [1000, 4000, 10000];
+      timeouts = [1000, 4000, 9000];
   //
   // Options to use for backoff
   //
