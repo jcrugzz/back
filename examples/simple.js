@@ -4,14 +4,14 @@ var back = require('../');
 // Options to use for backoff
 //
 // Remark: This object is modified so it should be cloned if you are dealing
-// with independent backoff attempts.
+// with independent backoff attempts and want to use these values as a base.
 //
 var backoff = {
   retries: 3,
   minDelay: 1000, // Defaults to 500ms
   maxDelay: 10000, // Defaults to infinity
-  // The following option is shown with its default value
-  // but you most likely don't need to define it.
+  // The following option is shown with its default value but you will most
+  // likely never define it as it creates the exponential curve.
   factor: 2,
 };
 
