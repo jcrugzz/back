@@ -1,5 +1,10 @@
 # back
 
+[![build
+status](https://secure.travis-ci.org/jcrugzz/back.png)](http://travis-ci.org/jcrugzz/back)
+
+[![NPM](https://nodei.co/npm/back.png)](https://nodei.co/npm/back/)
+
 A simple module to be used for creating exponentially weighted backoff attempts.
 Used in [Primus][Primus]
 
