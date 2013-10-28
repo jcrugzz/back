@@ -1,5 +1,8 @@
 
 var Back = module.exports = function reconnect(callback, opts) {
+  if (!(this instanceof Back)) {
+    return new Back(callback, opts);
+  }
 
   opts = opts || {};
 
