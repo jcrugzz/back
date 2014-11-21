@@ -1,4 +1,4 @@
-var Back = require('back');
+var Back = require('./index.js');
 var extend = require('xtend/immutable');
 var clearTimeout = require('timers').clearTimeout;
 
