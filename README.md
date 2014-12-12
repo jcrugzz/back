@@ -42,7 +42,7 @@ var options = {
 var attempt;
 
 function retry(err) {
-  var back = attempt || (attempt = new Back(backoff));
+  var back = attempt || (attempt = new Back(options));
   return back.backoff(function (fail) {
     if (fail) {
       // Oh noez we never reconnect :(
