@@ -1,7 +1,7 @@
 var http = require('http');
 var test = require('tape');
 
-var back = require('../');
+var Back = require('..');
 
 test('wooo does exponential backoff work as expected?', function (t) {
   t.plan(3);
@@ -13,7 +13,7 @@ test('wooo does exponential backoff work as expected?', function (t) {
   // Remark: This object is modified so it should be cloned if you are dealing
   // with independent backoff attempts and want to use these values as a base.
   //
-  var backoff = {
+  var options = {
     retries: 3,
     minDelay: 1000, // Defaults to 500ms
     maxDelay: 10000, // Defaults to infinity
@@ -22,21 +22,30 @@ test('wooo does exponential backoff work as expected?', function (t) {
     factor: 2,
   };
 
+  // Where we will store the backoff instance during a particular backoff attempt
+  var attempt;
+
   function retry(err) {
-    return back(function (fail) {
+    var back = attempt || (attempt = new Back(options));
+    return back.backoff(function (fail) {
       if (fail) {
         // Oh noez we never reconnect :(
         return t.end();
       }
-      t.ok(backoff.timeout >= timeouts[count++], 'Successful backoff with timeout ' +
-           backoff.timeout);
+
+      t.ok(back.settings.timeout >= timeouts[count++], 'Successful backoff with timeout ' +
+           back.settings.timeout);
     request();
-    }, backoff);
+    });
   }
 
   function request() {
     http.get('http://localhost:9000', function (res) {
       console.log('Successful Response that will not happen!');
+      //
+      // If we succeeded, we would set the current to null so the next error
+      // generates a new instance.
+      attempt = null;
     }).on('error', retry);
   }
 

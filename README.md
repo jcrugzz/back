@@ -6,7 +6,17 @@ status](https://secure.travis-ci.org/jcrugzz/back.png)](http://travis-ci.org/jcr
 [![NPM](https://nodei.co/npm/back.png)](https://nodei.co/npm/back/)
 
 A simple module to be used for creating exponentially weighted backoff attempts.
-Used in [Primus][Primus]
+Originally extracted from [Primus][Primus].
+
+__NOTICE__
+If you were a pre-1.0.0 `back` user, the API has changed to what is found below.
+If you do not like this slightly different abstraction and would prefer the
+former, slightly simpler API, it is still available with `require('back/reconnect')`.
+
+The API change thanks to a contribution from
+[@Raynos](https://github.com/Raynos) makes things simpler as you don't have to
+manage the copying of the options object yourself in order to handle repeated
+backoff cases.
 
 ## Example
 
@@ -19,7 +29,7 @@ var back = require('back');
 // Remark: This object is modified so it should be cloned if you are dealing
 // with independent backoff attempts and want to use these values as a base.
 //
-var backoff = {
+var options = {
   retries: 3,
   minDelay: 1000, // Defaults to 500ms
   maxDelay: 10000, // Defaults to infinity
@@ -28,8 +38,12 @@ var backoff = {
   factor: 2,
 };
 
+// Where we will store the backoff instance during a particular backoff attempt
+var attempt;
+
 function retry(err) {
-  return back(function (fail) {
+  var back = attempt || (attempt = new Back(backoff));
+  return back.backoff(function (fail) {
     if (fail) {
       // Oh noez we never reconnect :(
       console.error('Retry failed with ' + err.message);
@@ -38,15 +52,20 @@ function retry(err) {
     //
     // Remark: .attempt and .timeout are added to this object internally
     //
-    console.log('Retry attempt # ' + backoff.attempt +
-                ' being made after ' + backoff.timeout + 'ms');
+    console.log('Retry attempt # ' + back.settings.attempt +
+                ' being made after ' + back.settings.timeout + 'ms');
   request();
-  }, backoff);
+  });
 }
 
 function request() {
   http.get('http://localhost:9000', function (res) {
     console.log('Successful Response that will not happen!');
+    //
+    // If we succeeded, we would set the current to null so the next error
+    // generates a new instance.
+    //
+    attempt = null;
   }).on('error', retry);
 }
 
@@ -55,16 +74,19 @@ request();
 
 ## API
 
-`back(callback, backoffOpts);`
+### `var back = new Back(backoffOpts);`
 
-The `back` function returns you a function that simply executes the `callback`
-after a `setTimeout`. The timeout is what is based on an [exponential
+The `Back` constructor function takes your backoff options and saves them as
+`settings` in the internal state of the `back` object.
+
+#### `back.backoff(callback)`
+
+The `back` instance has a `backoff` method that takes a  `callback` that is
+executed after a `setTimeout`. The timeout is what is based on an [exponential
 backoff](http://dthain.blogspot.nl/2009/02/exponential-backoff-in-distributed.html) of course!
-
-### Note:
-
-I am considering switching the `backoffOpts` and `callback` as I understand it
-is an irregular api if enough people want it.
+It will repeatedly all this callback based on the backoff options you passed to
+the back instance until it exhausts its efforts. When it has exhausted its
+attempts, it will return an error as the first argument to the callback.
 
 [Primus]: https://github.com/3rd-Eden/primus
 
