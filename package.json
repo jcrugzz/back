@@ -1,13 +1,14 @@
 {
   "name": "back",
   "description": "Simple exponential backoff pulled out of Primus by @3rd-Eden",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "keywords": [
     "random",
     "exponential",
     "backoff"
   ],
   "author": "Jarrett Cruger <jcrugzz@gmail.com>",
+  "contributors": ["Jake Verbaten <raynos2@gmail.com>"],
   "repository": {
     "url": "git://github.com/jcrugzz/back.git"
   },
