@@ -88,5 +88,9 @@ It will repeatedly all this callback based on the backoff options you passed to
 the back instance until it exhausts its efforts. When it has exhausted its
 attempts, it will return an error as the first argument to the callback.
 
+#### `back.close()`
+
+Clear backoff timer in cases where you want to dispose of the instance before the `callback` is executed.
+
 [Primus]: https://github.com/3rd-Eden/primus
 
