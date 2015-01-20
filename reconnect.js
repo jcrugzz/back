@@ -8,11 +8,11 @@ var Reconnect = module.exports = function reconnect(callback, opts) {
 
   if (opts.backoff) return;
 
-  opts.maxDelay = opts.maxDelay || Infinity;  // Maximum delay.
-  opts.minDelay = opts.minDelay || 500;       // Minimum delay.
-  opts.retries = opts.retries || 10;          // Amount of allowed retries.
-  opts.attempt = (+opts.attempt || 0) + 1;    // Current attempt.
-  opts.factor = opts.factor || 2;             // Back off factor.
+  opts.maxDelay = opts.maxDelay || Infinity;                    // Maximum delay.
+  opts.minDelay = opts.minDelay || 500;                         // Minimum delay.
+  opts.retries = (opts.retries === 0 ? 0 : opts.retries) || 10; // Amount of allowed retries.
+  opts.attempt = (+opts.attempt || 0) + 1;                      // Current attempt.
+  opts.factor = opts.factor || 2;                               // Back off factor.
 
   // Bailout if we are about to make to much attempts. Please note that we use ...
   if (opts.attempt > opts.retries) {
